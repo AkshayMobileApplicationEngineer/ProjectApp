@@ -74,7 +74,7 @@ class MCQAdapter(private val freeTestQuestionResponse: FreeTestQuestionResponse)
         holder.countDownTimer = object : CountDownTimer(millisInFuture, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val secondsRemaining = millisUntilFinished / 1000
-                holder.timerTextView.text = "Time left: $secondsRemaining seconds"
+                holder.timerTextView.text = "left: $secondsRemaining seconds"
             }
 
             override fun onFinish() {

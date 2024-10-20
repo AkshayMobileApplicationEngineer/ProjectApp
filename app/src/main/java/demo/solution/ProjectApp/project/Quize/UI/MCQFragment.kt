@@ -53,9 +53,8 @@ class MCQFragment : Fragment() {
                         mcqAdapter = MCQAdapter(freeTestQuestionResponse)
                         recyclerViewMcqQuestion.adapter = mcqAdapter
                         mcqAdapter.notifyDataSetChanged()
+                        setpriview(freeTestQuestionResponse)
 
-                        setSnapHelper()
-                        setClickListener(freeTestQuestionResponse)
                         Toast.makeText(requireContext(), "Questions loaded successfully", Toast.LENGTH_SHORT).show()
                         Log.d("MCQFragment", "Response data: ${freeTestQuestionResponse}")
                     } else {
@@ -74,6 +73,15 @@ class MCQFragment : Fragment() {
             }
         })
     }
+
+    private fun setpriview(freeTestQuestionResponse: FreeTestQuestionResponse) {
+        setSnapHelper()
+        setClickListener(freeTestQuestionResponse)
+    }
+
+
+
+
 
     private fun setClickListener(freeTestQuestionResponse: FreeTestQuestionResponse) {
         previousButton.setOnClickListener {
