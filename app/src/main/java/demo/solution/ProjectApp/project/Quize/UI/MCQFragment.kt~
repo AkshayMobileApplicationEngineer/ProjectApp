@@ -80,8 +80,11 @@ class MCQFragment : Fragment() {
 
     private fun init(view: View?) {
         recyclerViewMcqQuestion = view?.findViewById(R.id.recycler_view_mcq_question) as RecyclerView
-        recyclerViewMcqQuestion.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-
+        recyclerViewMcqQuestion.layoutManager = LinearLayoutManager(())
+        iconApp = view.findViewById(R.id.icon_app) as ImageView
+        previousButton = view.findViewById(R.id.previousButton) as Button
+        nextButton = view.findViewById(R.id.nextButton) as Button
+        submitButton = view.findViewById(R.id.submitButton) as Button
         iconApp = view.findViewById(R.id.icon_app) as ImageView
         previousButton = view.findViewById(R.id.previousButton) as Button
         nextButton = view.findViewById(R.id.nextButton) as Button
