@@ -1,0 +1,45 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Home -->
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home"
+        android:title="Home" />
+
+    <!-- Profile -->
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_person"
+        android:title="Profile" />
+
+    <!-- Settings -->
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="Settings" />
+
+    <!-- Notifications -->
+    <item
+        android:id="@+id/nav_notifications"
+        android:icon="@drawable/ic_notifications"
+        android:title="Notifications" />
+
+    <!-- Help -->
+    <item
+        android:id="@+id/nav_help"
+        android:icon="@drawable/ic_help"
+        android:title="Help" />
+
+
+
+    <!--Test Free Quiz-->
+    <item
+        android:id="@+id/nav_Retrofit"
+        android:icon="@drawable/ic_api"
+        android:title="Retrofit"/>
+    <!--Razorpay-->
+    <item android:id="@+id/nav_Razorpay"
+        android:icon="@drawable/ic_razorpay"
+        android:title="Razorpay"/>
+
+</menu>

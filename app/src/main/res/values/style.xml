@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base application theme -->
+    <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme here -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryVariant">@color/primaryColorDark</item>
+
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <!-- Other theme attributes -->
+    </style>
+
+    <style name="Theme.MyApp.Day" parent="Theme.MyApp">
+            <item name="colorPrimary">@color/primaryColor</item>
+    <item name="colorPrimaryVariant">@color/primaryColorDark</item>
+
+    <item name="colorSecondary">@color/secondaryColor</item>
+    <!-- Other theme attributes -->
+    </style>
+
+    <style name="Theme.MyApp.Night" parent="Theme.MyApp">
+        <item name="colorPrimary">#6200EE</item>
+        <item name="colorPrimaryVariant">#3700B3</item>
+    </style>
+
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".project.Quize.TestFragment">
+
+
+
+    <LinearLayout
+        android:id="@+id/linear_layout"
+        android:weightSum="2"
+        android:layout_marginHorizontal="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_quiz_p"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="5dp"
+            android:textColor="@color/white"
+            android:padding="10dp"
+            android:elevation="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quiz Parlour"/>
+
+        <Button
+            android:id="@+id/btn_mcq"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="5dp"
+            android:textColor="@color/white"
+            android:padding="10dp"
+            android:elevation="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MCQ"
+            />
+    </LinearLayout>
+
+
+</RelativeLayout>
