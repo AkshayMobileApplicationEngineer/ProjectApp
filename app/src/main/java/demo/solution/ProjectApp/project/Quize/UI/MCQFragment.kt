@@ -49,18 +49,13 @@ class MCQFragment : Fragment() {
             override fun onResponse(call: Call<FreeTestQuestionResponse>, response: Response<FreeTestQuestionResponse>) {
                 if (response.isSuccessful && response.body() != null) {
                     val freeTestQuestionResponse = response.body()!!
-                    if (freeTestQuestionResponse != null) {
-                        mcqAdapter = MCQAdapter(freeTestQuestionResponse)
-                        recyclerViewMcqQuestion.adapter = mcqAdapter
-                        mcqAdapter.notifyDataSetChanged()
-                        setpriview(freeTestQuestionResponse)
+                    mcqAdapter = MCQAdapter(freeTestQuestionResponse, requireContext()) // Corrected line
+                    recyclerViewMcqQuestion.adapter = mcqAdapter
+                    mcqAdapter.notifyDataSetChanged()
+                    setpriview(freeTestQuestionResponse)
 
-                        Toast.makeText(requireContext(), "Questions loaded successfully", Toast.LENGTH_SHORT).show()
-                        Log.d("MCQFragment", "Response data: ${freeTestQuestionResponse}")
-                    } else {
-                        Log.e("MCQFragment", "No questions available")
-                        Toast.makeText(requireContext(), "No questions available", Toast.LENGTH_SHORT).show()
-                    }
+                    Toast.makeText(requireContext(), "Questions loaded successfully", Toast.LENGTH_SHORT).show()
+                    Log.d("MCQFragment", "Response data: ${freeTestQuestionResponse}")
                 } else {
                     Log.e("MCQFragment", "Failed to get test questions: ${response.message()}")
                     Toast.makeText(requireContext(), "Failed to get test questions: ${response.message()}", Toast.LENGTH_SHORT).show()

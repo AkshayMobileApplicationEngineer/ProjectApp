@@ -47,7 +47,7 @@ class MCQAdapter(
         holder.optionD.text = question.optionD
 
         // Set previously selected answer
-
+      
         holder.optionA.isChecked = userAnswers[position] == "A"
         holder.optionB.isChecked = userAnswers[position] == "B"
         holder.optionC.isChecked = userAnswers[position] == "C"
