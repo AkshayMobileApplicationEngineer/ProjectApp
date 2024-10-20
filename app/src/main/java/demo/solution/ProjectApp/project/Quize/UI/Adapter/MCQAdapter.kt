@@ -1,5 +1,6 @@
 package demo.solution.ProjectApp.project.Quize.UI.Adapter
 
+
 import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
@@ -7,12 +8,12 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
+
 import androidx.recyclerview.widget.RecyclerView
 import demo.solution.ProjectApp.R
 import demo.solution.ProjectApp.project.Quize.UI.FreeTestQuestionResponse
 
 class MCQAdapter(private val freeTestQuestionResponse: FreeTestQuestionResponse) : RecyclerView.Adapter<MCQAdapter.MCQViewHolder>() {
-    private val totalTimeInMillis: Long = 120000 // 120 seconds in milliseconds
     private val userAnswers: MutableList<String?> = MutableList(freeTestQuestionResponse.questions.size) { null }
 
     class MCQViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -40,7 +41,7 @@ class MCQAdapter(private val freeTestQuestionResponse: FreeTestQuestionResponse)
         holder.optionB.text = question.optionB
         holder.optionC.text = question.optionC
         holder.optionD.text = question.optionD
-        holder.timerTextView.text = "Time left: ${totalTimeInMillis / 1000} seconds"
+        holder.timerTextView.text = "Time left: ${freeTestQuestionResponse.test_data.time} seconds"
 
         // Set previously selected answer
         holder.optionsGroup.setOnCheckedChangeListener(null)
@@ -64,26 +65,9 @@ class MCQAdapter(private val freeTestQuestionResponse: FreeTestQuestionResponse)
             }
             userAnswers[position] = answer
 
-            // Start timer if an option is selected
-            startTimer(holder, totalTimeInMillis)
         }
     }
 
-    private fun startTimer(holder: MCQViewHolder, millisInFuture: Long) {
-        holder.countDownTimer?.cancel()
-        holder.countDownTimer = object : CountDownTimer(millisInFuture, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                val secondsRemaining = millisUntilFinished / 1000
-                holder.timerTextView.text = "left: $secondsRemaining seconds"
-            }
-
-            override fun onFinish() {
-                holder.timerTextView.text = "Time's up!"
-
-                // Handle what happens when time is up, e.g., automatically move to the next question or submit the quiz
-            }
-        }.start()
-    }
 
     override fun getItemCount(): Int {
         return freeTestQuestionResponse.questions.size
