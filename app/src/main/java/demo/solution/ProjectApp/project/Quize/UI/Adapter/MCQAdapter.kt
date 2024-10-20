@@ -79,6 +79,7 @@ class MCQAdapter(private val freeTestQuestionResponse: FreeTestQuestionResponse)
 
             override fun onFinish() {
                 holder.timerTextView.text = "Time's up!"
+
                 // Handle what happens when time is up, e.g., automatically move to the next question or submit the quiz
             }
         }.start()

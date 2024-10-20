@@ -51,6 +51,7 @@ class MCQFragment : Fragment() {
                     val freeTestQuestionResponse = response.body()!!
                     if (freeTestQuestionResponse != null) {
                         mcqAdapter = MCQAdapter(freeTestQuestionResponse)
+
                         recyclerViewMcqQuestion.adapter = mcqAdapter
                         mcqAdapter.notifyDataSetChanged()
 
@@ -95,8 +96,26 @@ class MCQFragment : Fragment() {
         }
         submitButton.setOnClickListener {
             val questions = freeTestQuestionResponse.questions
+            val correctAnswers = questions.count { question ->
+                question.correct_option == userAnswers[questions.indexOf(question)]
+            }
+            val incorrectAnswers = questions.size - correctAnswers
+            val skippedQuestions = questions.size - (correctAnswers + incorrectAnswers)
 
-           val resultMessage="Quiz Submiitted"
+            val totalTestTime = System.currentTimeMillis() - startTime
+
+            val totalTimeInSeconds = totalTestTime / 1000
+            val minutes = totalTimeInSeconds / 60
+            val seconds = totalTimeInSeconds % 60
+
+            val resultMessage = """
+            Quiz submitted
+            Correct Answers: $correctAnswers
+            Incorrect Answers: $incorrectAnswers
+            Skipped Questions: $skippedQuestions
+            Total Questions: ${questions.size}
+            Total Test Time: ${minutes}m ${seconds}s
+        """.trimIndent()
 
             showDialog(resultMessage)
             Toast.makeText(requireContext(), resultMessage, Toast.LENGTH_LONG).show()
