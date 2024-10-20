@@ -72,6 +72,7 @@ class MCQFragment : Fragment() {
     private fun setpriview(freeTestQuestionResponse: FreeTestQuestionResponse) {
         setSnapHelper()
         setClickListener(freeTestQuestionResponse)
+        val adapter = context?.let { MCQAdapter(freeTestQuestionResponse, it) }
     }
 
 
@@ -98,12 +99,7 @@ class MCQFragment : Fragment() {
         }
         submitButton.setOnClickListener {
             val questions = freeTestQuestionResponse.questions
-
-           val resultMessage="Quiz Submiitted"
-
-            showDialog(resultMessage)
-            Toast.makeText(requireContext(), resultMessage, Toast.LENGTH_LONG).show()
-            Log.d("QuizFragment", resultMessage)
+            mcqAdapter.submitDialogOpenHelper()
         }
     }
 

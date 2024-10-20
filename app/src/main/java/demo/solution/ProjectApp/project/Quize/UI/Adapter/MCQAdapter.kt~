@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.forEach
 import androidx.recyclerview.widget.RecyclerView
@@ -22,10 +24,16 @@ class MCQAdapter(
     private val userAnswers: MutableList<String?> = MutableList(freeTestQuestionResponse.questions.size) { null }
     private val timers: MutableList<CountDownTimer?> = MutableList(freeTestQuestionResponse.questions.size) { null }
 
+    // Lists to store question numbers
+    private val correctQuestions: MutableList<Int> = mutableListOf()
+    private val incorrectQuestions: MutableList<Int> = mutableListOf()
+    private val skippedQuestions: MutableList<Int> = mutableListOf()
+
     class MCQViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val questionNumberText: TextView = itemView.findViewById(R.id.questionNumberText)
         val timerTextView: TextView = itemView.findViewById(R.id.timerTextView)
         val questionText: TextView = itemView.findViewById(R.id.questionText)
+        val optionsGroup: RadioGroup = itemView.findViewById(R.id.optionsGroup)
         val optionA: RadioButton = itemView.findViewById(R.id.optionA)
         val optionB: RadioButton = itemView.findViewById(R.id.optionB)
         val optionC: RadioButton = itemView.findViewById(R.id.optionC)
@@ -46,12 +54,19 @@ class MCQAdapter(
         holder.optionC.text = question.optionC
         holder.optionD.text = question.optionD
 
-        // Set previously selected answer
-      
-        holder.optionA.isChecked = userAnswers[position] == "A"
-        holder.optionB.isChecked = userAnswers[position] == "B"
-        holder.optionC.isChecked = userAnswers[position] == "C"
-        holder.optionD.isChecked = userAnswers[position] == "D"
+        // Set previously selected answer and reset background colors
+        holder.optionsGroup.setOnCheckedChangeListener(null)
+        holder.optionsGroup.clearCheck()
+
+        userAnswers[position]?.let { answer ->
+            when (answer) {
+                "A" -> holder.optionA.isChecked = true
+
+                "B" -> holder.optionB.isChecked = true
+                "C" -> holder.optionC.isChecked = true
+                "D" -> holder.optionD.isChecked = true
+            }
+        }
 
         // Set click listeners for each option
         holder.optionA.setOnClickListener { selectedUserAnswer(holder, holder.optionA, "A", position) }
@@ -69,17 +84,24 @@ class MCQAdapter(
 
 
 
-        // Highlight the selected option
-        selectedOption.setBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.secondaryColor))
+
 
         // Check if the selected answer is correct
         if (question.correct_option == answer) {
-            // Handle correct answer (e.g., update score, show message, etc.)
+            correctQuestions.add(position + 1) // Store correct question number (1-based index)
         } else {
-            // Handle incorrect answer (e.g., show feedback)
+            incorrectQuestions.add(position + 1) // Store incorrect question number (1-based index)
         }
     }
 
+
+
+    // Method to handle skipped questions
+    fun skipQuestion(position: Int) {
+        if (userAnswers[position] == null) {
+            skippedQuestions.add(position + 1) // Store skipped question number (1-based index)
+        }
+    }
 
     private fun startTimer(holder: MCQViewHolder, position: Int) {
         timers[position]?.cancel() // Cancel any existing timer for this position
@@ -93,7 +115,9 @@ class MCQAdapter(
 
             override fun onFinish() {
                 holder.timerTextView.text = "Time's up!"
-                userAnswers[position] = null // Mark it as unanswered or handle accordingly
+                if (userAnswers[position] == null) {
+                    skipQuestion(position) // Mark question as skipped if time runs out
+                }
             }
         }.start()
     }
@@ -105,5 +129,23 @@ class MCQAdapter(
     // Cancel all timers when the adapter is no longer needed
     fun cancelAllTimers() {
         timers.forEach { it?.cancel() }
+    }
+
+    // Optionally, provide methods to retrieve question numbers
+    fun getCorrectQuestions(): List<Int> = correctQuestions
+    fun getIncorrectQuestions(): List<Int> = incorrectQuestions
+    fun getSkippedQuestions(): List<Int> = skippedQuestions
+
+    // Method to show totals in a Toast
+    fun showSubmitDialog() {
+        val totalCorrect = correctQuestions.size
+        val totalIncorrect = incorrectQuestions.size
+        val totalSkipped = skippedQuestions.size
+
+        val dialog = AlertDialog.Builder(context)
+        dialog.setTitle("Quiz Result")
+        dialog.setMessage("Correct: $totalCorrect, Incorrect: $totalIncorrect, Skipped: $totalSkipped")
+        dialog.setPositiveButton("OK") { _, _ -> }
+        dialog.show()
     }
 }
