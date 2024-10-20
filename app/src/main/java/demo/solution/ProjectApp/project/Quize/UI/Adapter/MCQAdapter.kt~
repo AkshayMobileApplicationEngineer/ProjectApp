@@ -137,7 +137,7 @@ class MCQAdapter(
     fun getSkippedQuestions(): List<Int> = skippedQuestions
 
     // Method to show totals in a Toast
-    fun submitDialogOpenHelper() {
+    fun showSubmitDialog() {
         val totalCorrect = correctQuestions.size
         val totalIncorrect = incorrectQuestions.size
         val totalSkipped = skippedQuestions.size
@@ -148,6 +148,4 @@ class MCQAdapter(
         dialog.setPositiveButton("OK") { _, _ -> }
         dialog.show()
     }
-
-
 }

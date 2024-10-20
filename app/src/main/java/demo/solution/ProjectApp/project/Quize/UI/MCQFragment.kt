@@ -10,22 +10,17 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SnapHelper
 import demo.solution.ProjectApp.R
 import demo.solution.ProjectApp.project.Quize.UI.Adapter.MCQAdapter
-import demo.solution.ProjectApp.project.Quize.UI.Question
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.math.max
 
 class MCQFragment : Fragment() {
-
     private lateinit var recyclerViewMcqQuestion: RecyclerView
     private lateinit var mcqAdapter: MCQAdapter
     private lateinit var iconApp: ImageView
@@ -33,12 +28,14 @@ class MCQFragment : Fragment() {
     private lateinit var nextButton: Button
     private lateinit var submitButton: Button
     private var currentQuestionIndex: Int = 0
+    private var userAnswers: MutableList<String?> = mutableListOf() // Initialize userAnswers
     private var countDownTimer: CountDownTimer? = null
+    private var startTime: Long = 0 // Track the start time for the quiz
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_m_c_q, container, false)
         init(view)
         testFreeQuestionRetrofit("128", "4")
@@ -46,37 +43,22 @@ class MCQFragment : Fragment() {
     }
 
     private fun testFreeQuestionRetrofit(userId: String, TestId: String) {
-        // Make the API call to get the test questions
         val call = RetrofitInstance.apiService.getFreeTestQuestion(userId, TestId)
 
         call.enqueue(object : Callback<FreeTestQuestionResponse> {
             override fun onResponse(call: Call<FreeTestQuestionResponse>, response: Response<FreeTestQuestionResponse>) {
-                try {
-                    if (response.isSuccessful && response.body() != null) {
-                        val freeTestQuestionResponse = response.body()
+                if (response.isSuccessful && response.body() != null) {
+                    val freeTestQuestionResponse = response.body()!!
+                    mcqAdapter = MCQAdapter(freeTestQuestionResponse, requireContext()) // Corrected line
+                    recyclerViewMcqQuestion.adapter = mcqAdapter
+                    mcqAdapter.notifyDataSetChanged()
+                    setpriview(freeTestQuestionResponse)
 
-
-                        if (freeTestQuestionResponse != null) {
-                            mcqAdapter = MCQAdapter(freeTestQuestionResponse)
-
-                            recyclerViewMcqQuestion.adapter = mcqAdapter
-                            mcqAdapter.notifyDataSetChanged()
-
-                            setSnapHelper()
-                            Toast.makeText(requireContext(), "Questions loaded successfully", Toast.LENGTH_SHORT).show()
-                            Log.d("MCQFragment", "Response data: ${freeTestQuestionResponse}")
-                        } else {
-                            Log.e("MCQFragment", "No questions available")
-                            Toast.makeText(requireContext(), "No questions available", Toast.LENGTH_SHORT).show()
-                        }
-
-                    } else {
-                        Log.e("MCQFragment", "Failed to get test questions: ${response.message()}")
-                        Toast.makeText(requireContext(), "Failed to get test questions: ${response.message()}", Toast.LENGTH_SHORT).show()
-                    }
-                } catch (e: Exception) {
-                    Log.e("MCQFragment", "Failed to get test questions: ${e.message}")
-                    Toast.makeText(requireContext(), "Failed to get test questions: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Questions loaded successfully", Toast.LENGTH_SHORT).show()
+                    Log.d("MCQFragment", "Response data: ${freeTestQuestionResponse}")
+                } else {
+                    Log.e("MCQFragment", "Failed to get test questions: ${response.message()}")
+                    Toast.makeText(requireContext(), "Failed to get test questions: ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -85,6 +67,40 @@ class MCQFragment : Fragment() {
                 Toast.makeText(requireContext(), "Network request failed: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun setpriview(freeTestQuestionResponse: FreeTestQuestionResponse) {
+        setSnapHelper()
+        setClickListener(freeTestQuestionResponse)
+        val adapter = context?.let { MCQAdapter(freeTestQuestionResponse, it) }
+    }
+
+
+
+
+
+    private fun setClickListener(freeTestQuestionResponse: FreeTestQuestionResponse) {
+        previousButton.setOnClickListener {
+            if (currentQuestionIndex > 0) {
+                recyclerViewMcqQuestion.smoothScrollToPosition(currentQuestionIndex - 1)
+            } else {
+                Toast.makeText(requireContext(), "This is the first question", Toast.LENGTH_SHORT).show()
+                Log.e("MCQFragment", "This is the first question")
+            }
+        }
+        nextButton.setOnClickListener {
+            if (currentQuestionIndex < freeTestQuestionResponse.questions.size - 1) {
+                recyclerViewMcqQuestion.smoothScrollToPosition(currentQuestionIndex + 1)
+            } else {
+                submitButton.visibility = View.VISIBLE
+                nextButton.visibility = View.GONE
+                Toast.makeText(requireContext(), "This is the last question", Toast.LENGTH_SHORT).show()
+            }
+        }
+        submitButton.setOnClickListener {
+            val questions = freeTestQuestionResponse.questions
+            mcqAdapter.submitDialogOpenHelper()
+        }
     }
 
     private fun setSnapHelper() {
@@ -96,10 +112,6 @@ class MCQFragment : Fragment() {
                 super.onScrollStateChanged(recyclerView, newState)
                 val view = snapHelper.findSnapView(recyclerView.layoutManager)
                 currentQuestionIndex = view?.let { recyclerView.layoutManager?.getPosition(it) } ?: 0
-
-
-
-
             }
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -116,7 +128,9 @@ class MCQFragment : Fragment() {
         previousButton = view.findViewById(R.id.previousButton) as Button
         nextButton = view.findViewById(R.id.nextButton) as Button
         submitButton = view.findViewById(R.id.submitButton) as Button
+        submitButton.visibility = View.GONE // Initially hide the submit button
     }
+
     private fun showDialog(resultMessage: String) {
         val dialog = AlertDialog.Builder(requireContext())
         dialog.setTitle("Quiz Result")
@@ -124,25 +138,4 @@ class MCQFragment : Fragment() {
         dialog.setPositiveButton("OK") { _, _ -> }
         dialog.show()
     }
-    /*
-    private fun startTimer(millisInFuture: Long) {
-
-        countDownTimer?.cancel()
-        countDownTimer = object : CountDownTimer(millisInFuture, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                val secondsRemaining = millisUntilFinished / 1000
-                timerTextView.text = "Time left: $secondsRemaining seconds"
-
-            }
-
-            override fun onFinish() {
-                timerTextView.text = "Time's up!"
-                // Handle what happens when time is up, e.g., automatically move to the next question or submit the quiz
-            }
-        }.start()
-    }
-
-
-     */
-
 }
