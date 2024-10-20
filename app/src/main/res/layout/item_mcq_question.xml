@@ -6,12 +6,13 @@
     >
 
     <RelativeLayout
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="40dp">
+            >
 
             <!-- Timer Display -->
             <TextView
@@ -59,7 +60,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/questionText"
                 android:layout_marginVertical="10dp"
-                android:paddingVertical="10dp"
                 >
 
                 <RadioButton
@@ -96,6 +96,15 @@
                     android:text="Option D"
                     android:textColor="@color/black"
                     android:textSize="16sp"
+                    android:padding="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginBottom="10dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:visibility="invisible"
                     android:padding="10dp" />
             </RadioGroup>
         </RelativeLayout>
