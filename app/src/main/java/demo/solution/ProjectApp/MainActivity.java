@@ -24,6 +24,7 @@ import demo.solution.ProjectApp.Concept.RazorpayFragment;
 import demo.solution.ProjectApp.Concept.RetrofitFragment;
 import demo.solution.ProjectApp.Concept.RoomDataBaseFragment;
 import demo.solution.ProjectApp.project.ELearnigApp.ELearningFragment;
+import demo.solution.ProjectApp.project.Quize.TestFragment;
 import demo.solution.ProjectApp.project.Quize.UI.QuizFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     // Method to open the right drawer
     public void openRightDrawer() {
         if (!drawerLayout.isDrawerOpen(GravityCompat.END)) {
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (itemId == R.id.nav_notifications) {
                     fragment = new NotificationFragment();
                 } else if (itemId == R.id.nav_quiz) {
-                    fragment = new QuizFragment();
+                    fragment = new TestFragment();
                 } else if (itemId == R.id.nav_Retrofit) {
                     fragment = new RetrofitFragment();
                 } else if (itemId == R.id.nav_Razorpay) {
