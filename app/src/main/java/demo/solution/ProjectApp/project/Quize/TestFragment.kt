@@ -41,7 +41,7 @@ class TestFragment : Fragment() {
             startFragment(QuizFragment())
         }
         btnMcq.setOnClickListener {
-            startFragment(MCQFragment())
+            startFragment(MCQFragment<Any>())
         }
     }
 

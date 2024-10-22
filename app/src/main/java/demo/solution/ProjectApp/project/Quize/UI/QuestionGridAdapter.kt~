@@ -1,0 +1,55 @@
+package demo.solution.ProjectApp.project.Quize.UI
+
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
+import android.widget.TextView
+import demo.solution.ProjectApp.R
+import demo.solution.ProjectApp.project.Quize.UI.Adapter.OnQuestionClickListener
+
+class QuestionGridAdapter(
+    private val freeTestQuestionResponse: FreeTestQuestionResponse,
+    private val status: Int,
+    private val onQuestionClickListener: OnQuestionClickListener
+) : BaseAdapter() {
+    private lateinit var quizNumberGetItem: TextView
+    override fun getCount(): Int {
+        return freeTestQuestionResponse.questions.size
+    }
+
+    override fun getItem(position: Int): Any {
+        return freeTestQuestionResponse.questions[position]
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        val myView: View
+        if (convertView == null) {
+            // Inflate the layout correctly
+            myView = LayoutInflater.from(parent?.context).inflate(R.layout.item_mcq_question, parent, false)
+
+        } else {
+            myView = convertView
+        }
+
+
+        Log.d("QuestionGridAdapter", "Inflating view for position: $position")
+        quizNumberGetItem= myView.findViewById(R.id.quizNumberGetItem)
+        if (quizNumberGetItem == null) {
+            Log.e("QuestionGridAdapter", "quizNumberGetItem is null for position: $position")
+        }
+
+
+        // Set click listener
+        quizNumberGetItem.setOnClickListener {
+            onQuestionClickListener.onQuestionClick(position)
+        }
+
+        return myView
+    }
+}

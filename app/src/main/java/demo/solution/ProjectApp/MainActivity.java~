@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Close the appropriate drawer
                 drawerLayout.closeDrawer(navigationView);
-                Log.e("TAG", "onNavigationItemSelected: ".concat(Boolean.TRUE.toString()));
+                Log.e("TAG", "onNavigationItemSelected: ".concat(Boolean.FALSE.toString())); 
                 return true;
             }
         });

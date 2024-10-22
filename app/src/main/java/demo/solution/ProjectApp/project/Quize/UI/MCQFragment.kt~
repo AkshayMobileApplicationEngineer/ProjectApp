@@ -71,7 +71,7 @@ class MCQFragment<T> : Fragment(), OnQuestionClickListener {
                     gridView.adapter = questionGridAdapter
 
 
-
+                  
 
                     Toast.makeText(
                         requireContext(),

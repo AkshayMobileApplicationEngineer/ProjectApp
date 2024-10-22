@@ -12,11 +12,13 @@
         android:paddingHorizontal="50dp"
         android:layout_height="60dp">
         <ImageView
+            android:id="@+id/idConcept"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_more"/>
         <ImageView
+            android:id="@+id/idProject"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
