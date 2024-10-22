@@ -40,10 +40,10 @@ public class HomeFragment extends Fragment {
         idHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment quizFragment = new TestFragment();
+                Fragment RoomDataBaseFragment = new RoomDataBaseFragment();
                 if (getActivity() != null) {
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.fragment_container, quizFragment);
+                    transaction.replace(R.id.fragment_container, RoomDataBaseFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
                 }
