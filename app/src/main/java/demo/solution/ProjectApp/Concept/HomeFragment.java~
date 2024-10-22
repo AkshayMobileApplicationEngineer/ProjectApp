@@ -1,6 +1,8 @@
 package demo.solution.ProjectApp.Concept;
 
-import android.content.Context;
+
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +11,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import demo.solution.ProjectApp.MainActivity;
+import org.jetbrains.annotations.Nullable;
+
 import demo.solution.ProjectApp.R;
 import demo.solution.ProjectApp.project.Quize.TestFragment;
 
@@ -33,16 +33,15 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         idHome = view.findViewById(R.id.idHome);
-        idConcept = view.findViewById(R.id.idConcept);
+        idConcept = view.findViewById(R.id.idConcept);  // These are ImageViews now
         idProject = view.findViewById(R.id.idProject);
 
-        // Handle the Home button click to open TestFragment
         idHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Fragment quizFragment = new TestFragment();
                 if (getActivity() != null) {
-                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragment_container, quizFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
@@ -50,22 +49,20 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // Handle opening the left drawer
         idConcept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (getActivity() != null) {
-                    ((MainActivity) getActivity()).openLeftDrawer();
+                    ((MainActivity) getActivity()).openLeftDrawer(); // Open left drawer from MainActivity
                 }
             }
         });
 
-        // Handle opening the right drawer
         idProject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (getActivity() != null) {
-                    ((MainActivity) getActivity()).openRightDrawer();
+                    ((MainActivity) getActivity()).openRightDrawer(); // Open right drawer from MainActivity
                 }
             }
         });
@@ -76,6 +73,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        fragmentManager = getChildFragmentManager();  // This is the correct fragment manager
+        fragmentManager = getChildFragmentManager();
     }
 }
